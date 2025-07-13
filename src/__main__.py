@@ -1,6 +1,8 @@
 import actions
 import core
 from colorama import Fore
+import webbrowser
+import yt_dlp
 
 import speech_recognition as sr
 
@@ -99,6 +101,10 @@ def main():
         actions.hi()
       elif interpret == 'calculator':
         actions.calculator()
+      elif interpret == 'spotify':
+        actions.spotify()
+      elif interpret == 'search_on_youtube':
+        actions.search_on_youtube(command)
       elif interpret == 'current_time':
         actions.current_time()
       elif interpret == 'close':

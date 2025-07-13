@@ -9,8 +9,10 @@ user_interaction = Fore.GREEN + "you: " + Fore.WHITE
 available_actions = {
   "hi": ["hi", "hola"],
   "calculator": ["open calculator", "calculator", "show calculator", "calculadora"],
+  "spotify": ["open spotify", "spotify", "show spotify", "quiero escuchar musica", "musica", "music"],
+  "search_on_youtube": ["search on youtube", "busca en youtube", "pon en youtube", "busca en youtube una"],
   "current_time": ["current time", "time", "show current time", "hora es", "hora"],
-  "close": ["exit", "i want exit", "close", "salir", "adios", "chao"]
+  "close": ["exit", "i want exit", "close", "salir", "adios", "chao"],
 }
 
 available_modes = {
