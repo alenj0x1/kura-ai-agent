@@ -2,6 +2,10 @@ from fuzzywuzzy import fuzz
 from colorama import Fore
 import random
 import time
+import json
+import os
+
+CONFIG_FILENAME = "kura_config.json"
 
 kura_response = Fore.MAGENTA + "kura:" + Fore.WHITE
 user_interaction = Fore.GREEN + "you: " + Fore.WHITE
@@ -30,6 +34,12 @@ loading_phrases = [
   "my name is kura, and yours? ₍ᐢ. .ᐢ₎"
 ]
 
+default_config = {
+  "username":       "",
+  "mode":           "",
+  "voice_language": ""
+}
+
 def interpret_command(command: str):
   best_action = "unknown"
   best_score = 0
@@ -48,3 +58,14 @@ def interpret_command(command: str):
 def loading():
   print(f"{kura_response} looking in my systems. {loading_phrases[random.randrange(0, len(loading_phrases))]}")
   time.sleep(0.8)
+
+def load_config():
+  if not os.path.exists(CONFIG_FILENAME):
+    save_config(default_config)
+
+  with open(CONFIG_FILENAME, mode="r", encoding="utf-8") as f:
+    return json.load(f)
+  
+def save_config(config):
+  with open(CONFIG_FILENAME, "w", encoding="utf-8") as f:
+    json.dump(config, f, indent=4, ensure_ascii=False)

@@ -1,8 +1,6 @@
 import actions
 import core
 from colorama import Fore
-import webbrowser
-import yt_dlp
 
 import speech_recognition as sr
 
@@ -22,51 +20,74 @@ def main():
 
                      kura ai agent v.1.0.0
 """)
-  mode = None
-  voiceLanguage = None
+  # Load configuration
+  config = core.load_config()
+
+  username = config["username"]
+  mode = config["mode"]
+  voice_language = config["voice_language"]
+
+  # Select username
+  while username == "":
+    print(f"{core.kura_response} what should i call you? ᓚ₍⑅^..^₎")
+    username = input(f"{core.user_interaction} ")
+
+    print(f"{core.kura_response} nice to meet you" + Fore.YELLOW + f" {username}" + Fore.WHITE + " ᓚ₍⑅^..^₎♡ !!!")
 
   # Select mode
-  while mode == None:
-    modesKeys = core.available_modes.keys()
+  while mode == "":
+    modes_keys = core.available_modes.keys()
 
-    print(f"{core.kura_response} select a mode to interact with me: ")
+    print(f"{core.kura_response} select a mode to interact with me, {username}: ")
     
     for key, value in core.available_modes.items():
       print(f"{core.kura_response}" + Fore.YELLOW + f" [{key}]:" + Fore.WHITE + f" {value}")
     
-    selectMode = input(f"{core.user_interaction} ")
+    selected_mode = input(f"{core.user_interaction} ")
 
-    if selectMode not in modesKeys:
+    if selected_mode not in modes_keys:
       print(f"{core.kura_response}" + Fore.RED + " the mode you entered is incorrect (ó﹏ò｡)")
       continue
     
-    mode = selectMode
+    mode = selected_mode
     print(f"{core.kura_response} you selected to interact with me, using the mode" + Fore.YELLOW + f" [{mode}]" + Fore.WHITE)
 
   # Select voice language
-  while mode == "voice" and voiceLanguage == None:
-    modesKeys = core.available_languages.keys()
+  while mode == "voice" and voice_language == "":
+    voice_language_keys = core.available_languages.keys()
 
-    print(f"{core.kura_response} select a language to communicate with me")
+    print(f"{core.kura_response} select a language to communicate with me, {username}")
     
     for key, value in core.available_languages.items():
       print(f"{core.kura_response}" + Fore.YELLOW + f" [{key}]:" + Fore.WHITE + f" {value}")
     
-    selectMode = input(f"{core.user_interaction} ")
+    selected_voice_language = input(f"{core.user_interaction} ")
 
-    if selectMode not in modesKeys:
+    if selected_voice_language not in voice_language_keys:
       print(f"{core.kura_response}" + Fore.RED + " the language you entered is incorrect (ó﹏ò｡)")
       continue
     
-    voiceLanguage = selectMode
-    print(f"{core.kura_response} you have selected to communicate with me in " + Fore.YELLOW + f" [{mode}]" + Fore.WHITE)
+    voice_language = selected_voice_language
+    print(f"{core.kura_response} you have selected to communicate with me in " + Fore.YELLOW + f" [{voice_language}]" + Fore.WHITE)
     
+  # Automatic configuration save
+  if config["username"] is not username or config["mode"] is not mode or config["voice_language"] is not voice_language:
+    config["username"] = username
+    config["mode"] = mode
+    config["voice_language"] = voice_language
+    
+    core.save_config(config=config)
+    
+    print(f"{core.kura_response}" + Fore.BLUE + " i noticed that you set some of my settings, so i've saved it for you for next time ₍ᐢ. .ᐢ₎ ₊˚⊹♡ !!!! " + Fore.WHITE)
 
-  # Menu
+  # Welcome
+  print(f"{core.kura_response} welcome, {username} ₍^. .^₎⟆")
+
+  # Menu    
   while True:
     print(f"{core.kura_response} my available actions are:" + Fore.YELLOW + f" {str.join(', ', core.available_actions.keys())}" + Fore.WHITE + " ₍^. .^₎Ⳋ")
 
-    print(f"{core.kura_response} what do you want to do?")
+    print(f"{core.kura_response} what do you want to do, {username}?")
     
     command = None
 
@@ -82,15 +103,15 @@ def main():
 
         try:
           audio = r.listen(source, timeout=5)
-          command = r.recognize_google(audio, language=voiceLanguage)
+          command = r.recognize_google(audio, language=voice_language)
 
-          print(f"{core.kura_response} you said: {command} (๑'ᵕ'๑)⸝*")
+          print(f"{core.kura_response} you said:" + Fore.BLUE + f" {command} (๑'ᵕ'๑)⸝*")
         except sr.WaitTimeoutError:
-            print(f"{core.kura_response} i didn't hear anything. try again. (•︠‿•︡)")
+            print(f"{core.kura_response}" + Fore.RED +  " i didn't hear anything. try again. (•︠‿•︡)")
         except sr.UnknownValueError:
-            print(f"{core.kura_response} sorry, i could not understand you. (・・ )")
+            print(f"{core.kura_response}" + Fore.RED +  " sorry, i could not understand you. (・・ )")
         except sr.RequestError as e:
-            print(f"{core.kura_response} could not request results; {e}")
+            print(f"{core.kura_response}" + Fore.RED +  " could not request results; {e}")
 
     if command is not None:
       interpret = core.interpret_command(command)
@@ -98,17 +119,17 @@ def main():
       core.loading()
 
       if interpret == 'hi':
-        actions.hi()
+        actions.hi(username=username)
       elif interpret == 'calculator':
         actions.calculator()
       elif interpret == 'spotify':
         actions.spotify()
       elif interpret == 'search_on_youtube':
-        actions.search_on_youtube(command)
+        actions.search_on_youtube(query=command)
       elif interpret == 'current_time':
         actions.current_time()
       elif interpret == 'close':
-        actions.close()
+        actions.close(username=username)
       elif interpret == None:
         actions.action_not_found()
 
