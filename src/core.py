@@ -13,6 +13,16 @@ available_actions = {
   "close": ["exit", "i want exit", "close", "salir", "adios", "chao"]
 }
 
+available_modes = {
+  "voice": "Say the action you want to perform by using the microphone",
+  "keyboard": "Say the action you want to perform by typing"
+}
+
+available_languages = {
+  "es-ES": "Communicate with me in English",
+  "en-US": "Communicate with me in Spanish"
+}
+
 loading_phrases = [
   f"did you know that I have {len(available_actions)} actions you can use? ꒰ᐢ. .ᐢ꒱",
   "my name is kura, and yours? ₍ᐢ. .ᐢ₎"
