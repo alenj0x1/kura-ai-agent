@@ -11,7 +11,7 @@ def calculator():
 
 def current_time():
   now = datetime.now()
-  print(f"{kura_response} current time is: {now.strftime('%H:%m:%S')} ( • ᴗ - ) ✧")
+  print(f"{kura_response} current time is: {now.strftime('%H:%M:%S')} ( • ᴗ - ) ✧")
 
 def action_not_found():
   print(f"{kura_response} i don't know what action you are referring to, try again. (¬_¬')")

@@ -27,11 +27,13 @@ def main():
     
     interpret = core.interpret_command(command)
 
+    core.loading()
+
     if interpret == 'hi':
       actions.hi()
-    if interpret == 'calculator':
+    elif interpret == 'calculator':
       actions.calculator()
-    if interpret == 'current_time':
+    elif interpret == 'current_time':
       actions.current_time()
     elif interpret == 'close':
       actions.close()
